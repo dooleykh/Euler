@@ -1,0 +1,10 @@
+#!/usr/bin/env lein-exec
+
+;; Trial Division is slow...
+(let [divisors (range 1 21)]
+  (println
+    (first (filter (fn [x]
+                       (every? (fn [divisor]
+                                   (= 0 (mod x divisor)))
+                                   divisors))
+                   (drop 1 (range))))))

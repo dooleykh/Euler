@@ -1,0 +1,5 @@
+#!/usr/bin/env lein-exec
+
+(println (reduce +
+                 (map #(Character/getNumericValue %)
+                      (.toString (.pow (biginteger 2 ) 1000) 10))))

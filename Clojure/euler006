@@ -1,0 +1,7 @@
+#!/usr/bin/env lein-exec
+
+(let [vals (range 1 101)
+      sum-of-squares (reduce + (map (fn [x] (* x x )) vals))
+      sums (reduce + 0 vals)
+      square-of-sums (* sums sums)]
+  (println (- square-of-sums sum-of-squares)))

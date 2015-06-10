@@ -1,0 +1,12 @@
+#!/usr/bin/env lein-exec
+
+(defn even-fib [limit]
+  (loop [a 1 b 1 res 0]
+    (let [current (+ a b)]
+      (if (>= current limit)
+          res
+          (if (even? current)
+            (recur b current (+ res current))
+            (recur b current res))))))
+
+(println (even-fib 4000000))

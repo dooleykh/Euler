@@ -1,0 +1,21 @@
+#!/usr/bin/env lein-exec
+
+(defn tag-with-digits [num]
+  (loop [val num res '()]
+    (if (= 0 val)
+      (vector num res)
+      (recur (int (/ val 10)) (cons (mod val 10) res)))))
+
+(defn palindrome? [[num digits]]
+  (loop [x 0 y (- (count digits) 1)]
+    (if (>= x y)
+      true
+      (if (= (nth digits x) (nth digits y))
+        (recur (+ x 1) (- y 1))
+        false))))
+
+(let [three-digits (range 100 1000)
+      candidates (for [x three-digits y three-digits :when (<= x y)] (* x y))
+      with-digits (map tag-with-digits candidates)
+      tagged-palindromes (filter palindrome? with-digits)]
+      (println (reduce (fn [x y] (max x y)) 0 (map (fn [x] (first x)) tagged-palindromes))))
