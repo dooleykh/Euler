@@ -1,0 +1,13 @@
+#!/usr/bin/env lein-exec
+
+(load-file "./prime-generator.clj")
+
+;;Prints out prime factors as they occur. Answer is 6857
+(loop [primes (gen-primes) max-factor 0]
+  (let [current (first primes) rest (drop 1 primes)]
+    (cond
+      (> current 600851475143 ) (println max-factor)
+      (= java.lang.Long (type (/ 600851475143  current)))
+        (do (println current)
+            (recur rest current))
+      :else (recur rest max-factor))))

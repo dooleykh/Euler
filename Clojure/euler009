@@ -1,0 +1,10 @@
+#!/usr/bin/env lein-exec
+
+;;Could be cleaner, since we only need to find one instance
+(let [nums (range 1 1001)]
+  (->> (for [a nums b nums :let [c (- 1000 a b)] :when (and (< a b c)
+                                                       (= (+ (* a a ) (* b b)) (* c c)))]
+            [a b c])
+       (first) ;;We've been told there's only one
+       (apply *)
+       (println)))

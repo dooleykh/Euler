@@ -1,0 +1,5 @@
+#!/usr/bin/env lein-exec
+
+(load-file "./prime-generator.clj")
+
+(println (first (drop 10000 (gen-primes))))
