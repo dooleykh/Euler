@@ -1,0 +1,16 @@
+#!/usr/bin/env lein-exec
+
+;;A suboptimal Sieve of Eratosthenes. Follows the same idea,
+;;but uses set differences instead of mutating the list directly
+;;and explicitly tracks the primes it has encountered.
+(defn sieve [limit]
+  (let [vals (apply sorted-set (range 2 limit))]
+    (loop [candidates vals primes '()]
+      (if (= (count candidates) 0)
+        primes
+        (let [current-prime (first candidates)
+              multiples (set (range current-prime limit current-prime))]
+          (recur (clojure.set/difference candidates multiples)
+                 (cons current-prime primes)))))))
+
+(println (apply + (sieve 2000000)))
