@@ -1,0 +1,45 @@
+#!/usr/bin/env lein-exec
+
+(load-file "./prime-generator.clj")
+
+(defn triangle-numbers
+  ([] (triangle-numbers 0 (drop 1 (range))))
+  ([n natural-numbers]
+    (let [next-value (+ n (first natural-numbers))]
+      (cons next-value
+            (lazy-seq (triangle-numbers next-value
+                                        (rest natural-numbers)))))))
+
+;;Defines n, n^2,, n^3, ...
+(defn powers
+  ([n] (powers n n))
+  ([n current]
+    (cons current (lazy-seq (powers n (* current n))))))
+
+(defn factor [n]
+  (loop [val n factors '() primes (gen-primes)]
+    (if (= val 1)
+        factors
+        (let [candidate (first primes)
+              candidate-powers (powers candidate)
+              divisors (take-while (fn [d] (= 0 (mod val d)))
+                                      candidate-powers)
+              num-factors (count divisors)
+              new-factors (take num-factors (repeat candidate))]
+          (if (= 0 num-factors)
+              (recur val
+                     factors
+                     (rest primes))
+              (recur (/ val (apply * new-factors))
+                     (cons new-factors factors)
+                     (rest primes)))))))
+
+;;Look more into your generating functions.
+(defn count-combinations [factor-list])
+
+
+(loop [candidates '(1 3 6 10 15 21 28)];;(triangle-numbers)]
+  (let [candidate (first candidates) factors (factor candidate)]
+    (if (>= (count-combinations factors) 5)
+        (println candidate)
+        (recur (rest candidates)))))
