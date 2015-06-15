@@ -1,0 +1,13 @@
+#!/usr/bin/env lein-exec
+
+(defn factorial [n]
+  (loop [current n res 1]
+    (if (<= current 1)
+        res
+        (recur (dec current) (*' res current)))))
+
+(defn digits [n]
+  (let [chars-to-digits (zipmap "0123456789" (range 10))]
+    (map (fn [digit] (chars-to-digits digit)) (str n))))
+
+(println (apply +' (digits (factorial 100))))
