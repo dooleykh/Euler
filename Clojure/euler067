@@ -1,0 +1,27 @@
+#!/usr/bin/env lein-exec
+(require '[clojure.string :as str])
+
+(def triangle
+  (with-open [rdr (clojure.java.io/reader "p067_triangle.txt")]
+    (doall
+      (->> (line-seq rdr)
+           (mapv (fn [line] (str/split line #" ")))
+           (mapv (fn [vals] (mapv (fn [val] (Integer/parseInt val))
+                                 vals)))))))
+
+(defn max-sum-helper [level next-row]
+  (if (< level 0)
+      (first next-row)
+      (max-sum-helper (dec level)
+                      (mapv (fn [i val]
+                               (+ val
+                                  (max (next-row i)
+                                  (next-row (inc i)))))
+                            (range (count (triangle level)))
+                            (triangle level)))))
+
+(defn max-sum []
+    (max-sum-helper (- (count triangle) 2)
+                    (last triangle)))
+
+(println (max-sum))
