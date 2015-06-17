@@ -1,0 +1,12 @@
+#!/usr/bin/env lein-exec
+
+(defn exponentiate [a b]
+  (cond
+    (= b 1) a
+    (even? b) (exponentiate (*' a a) (/ b 2))
+    :else     (*' a (exponentiate (*' a a) (/ (- b 1) 2)))))
+
+(->> (into #{} (map (fn [[a b]] (exponentiate a b))
+                   (for [a (range 2 101) b (range 2 101)] [a b])))
+     (count)
+     (println))
