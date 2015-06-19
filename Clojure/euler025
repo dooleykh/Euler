@@ -1,0 +1,13 @@
+#!/usr/bin/env lein-exec
+
+(def first-num-with-1000-digits
+  (apply *' (take 999 (repeat 10))))
+
+(defn fib
+  ([] (fib 1 1))
+  ([a b] (cons a (lazy-seq (fib b (+' a b))))))
+
+(loop [index 1 fibs (fib)]
+  (if (< first-num-with-1000-digits (first fibs))
+      (println index)
+      (recur (inc index) (rest fibs))))

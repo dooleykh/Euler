@@ -1,0 +1,42 @@
+#!/usr/bin/env lein-exec
+(load-file "prime-generator.clj")
+
+;;Defines n, n^2,, n^3, ...
+(defn powers
+  ([n] (powers n n))
+  ([n current]
+    (cons current (lazy-seq (powers n (* current n))))))
+
+(defn factor [n]
+  (if (= 0 n)
+      '()
+      (loop [val n factors '() primes (gen-primes)]
+        (if (= val 1)
+            factors
+            (let [candidate (first primes)
+                  candidate-powers (powers candidate)
+                  divisors (take-while (fn [d] (= 0 (mod val d)))
+                                          candidate-powers)
+                  num-factors (count divisors)
+                  new-factors (take num-factors (repeat candidate))]
+              (if (= 0 num-factors)
+                  (recur val
+                         factors
+                         (rest primes))
+                  (recur (/ val (apply * new-factors))
+                         (cons new-factors factors)
+                         (rest primes))))))))
+
+
+(defn count-combinations [factor-list]
+  (->> factor-list
+       (map (fn [factors] (inc (count factors))))
+       (apply *)))
+
+(defn count-proper-divisors [n]
+  (- (count-combinations (factor n)) 1))
+
+(->> (mapv count-proper-divisors (range 10000))
+     (count)
+     (println)
+  )
