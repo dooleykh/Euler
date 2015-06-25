@@ -1,0 +1,34 @@
+#!/usr/bin/env lein-exec
+
+(defn int-to-digits [n]
+  (loop [current n digits '()]
+    (let [d (rem current 10)]
+      (if (zero? current)
+        digits
+        (recur (/ (- current d) 10) (cons d digits))))))
+
+(defn digits
+  ([]   (digits 1))
+  ([n] (lazy-cat (int-to-digits n)
+                  (lazy-seq (digits (inc n))))))
+
+;;Select indicies from an infinite sequence
+;;For this simple problem, we require that indicies is sorted
+(defn select-indicies [indicies coll]
+  (loop [pos 1 candidates indicies c coll res '()]
+    (cond
+      (empty? candidates) res
+      (= pos (first candidates)) (recur (inc pos)
+                                        (rest candidates)
+                                        (rest c)
+                                        (cons (first c)
+                                              res))
+      :else                      (recur (inc pos)
+                                        candidates
+                                        (rest c)
+                                        res))))
+
+(->> (digits)
+     (select-indicies '(1 10 100 1000 10000 100000 1000000))
+     (apply *')
+     (println))

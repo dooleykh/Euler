@@ -1,0 +1,53 @@
+#!/usr/bin/env lein-exec
+
+(load-file "prime-generator.clj")
+
+(defn to-digits [n]
+  (loop [current n digits '()]
+    (if (= current 0)
+        digits
+        (recur (int (/ current 10))
+               (cons (rem current 10)
+                     digits)))))
+
+(defn powers-of-10
+  ([n] (powers-of-10 1 n '()))
+  ([current n res]
+    (if (zero? n)
+        res
+        (powers-of-10 (* 10 current)
+                      (dec n)
+                      (cons current res)))))
+
+(defn to-num [digits]
+  (apply +
+         (map (fn [digit tens-place] (* digit tens-place))
+              digits
+              (powers-of-10 (count digits)))))
+
+(defn rotations [digits]
+  (loop [current (concat (rest digits)
+                         (list (first digits)))
+         num-rotations (dec (count digits))
+         res '()]
+    (if (zero? num-rotations)
+        res
+        (recur (concat (rest current)
+                       (list (first current)))
+               (dec num-rotations)
+               (cons current res)))))
+
+(def primes-under-1000000
+  (into #{} (take-while (partial > 1000000)
+                        (gen-primes))))
+
+(defn circular? [n]
+  (->> (to-digits n)
+       (rotations)
+       (map to-num)
+       (every? (partial contains? primes-under-1000000))))
+
+(->> primes-under-1000000
+     (filter circular?)
+     (count)
+     (println))
