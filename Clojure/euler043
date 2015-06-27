@@ -1,0 +1,29 @@
+#!/usr/bin/env lein-exec
+
+(def powers-of-10
+  '(1000000000 100000000 10000000 1000000 100000 10000 1000 100 10 1))
+
+;Compute candidates by largest prime first to reduce search space
+(->> (for [j (range 10)
+           i (range 10)
+           h (range 10)
+           :when (zero? (rem (+ (* 100 h) (* 10 i) j) 17))
+           g (range 10)
+           :when (zero? (rem (+ (* 100 g) (* 10 h) i) 13))
+           f (range 10)
+           :when (zero? (rem (+ (* 100 f) (* 10 g) h) 11))
+           e (range 10)
+           :when (zero? (rem (+ (* 100 e) (* 10 f) g) 7))
+           d (range 10)
+           :when (zero? (rem (+ (* 100 d) (* 10 e) f) 5))
+           c (range 10)
+           :when (zero? (rem (+ (* 100 c) (* 10 d) e) 3))
+           b (range 10)
+           :when (zero? (rem (+ (* 100 b) (* 10 c) d) 2))
+           a (range 10)
+           :when (distinct? a b c d e f g h i j)]
+       (apply + (map #(* %1 %2)
+                     [a b c d e f g h i j]
+                     powers-of-10)))
+     (apply +)
+     (println))
