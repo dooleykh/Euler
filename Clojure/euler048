@@ -1,0 +1,23 @@
+#!/usr/bin/env lein-exec
+
+(defn exponentiate [x n]
+  (cond
+    (zero? n) 0
+    (= 1 n)   x
+    (even? n) (exponentiate (*' x x) (/ n 2))
+    :else     (*' x (exponentiate (*' x x) (/ (- n 1) 2)))))
+
+(defn to-digits [n]
+  (loop [current n res '()]
+    (if (zero? current)
+      res
+      (let [r (rem current 10)]
+        (recur (/ (- current r) 10) (cons r res))))))
+
+(->> (range 1 1001)
+     (map #(exponentiate % %))
+     (apply +')
+     (to-digits)
+     (take-last 10)
+     (clojure.string/join "")
+     (println))

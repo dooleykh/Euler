@@ -1,0 +1,20 @@
+#!/usr/bin/env lein-exec
+
+(defn to-digits [n]
+  (loop [current n res '()]
+    (if (zero? current)
+      res
+      (let [r (rem current 10)]
+        (recur (/ (- current r) 10) (cons r res))))))
+
+(defn to-binary [n]
+  (loop [current n res '()]
+    (if (zero? current)
+      res
+      (recur (quot current 2) (cons (rem current 2) res)))))
+
+(->> (range 1 1000000 2)
+     (filter #(let [digits (to-digits %)] (= digits (reverse digits))))
+     (filter #(let [digits (to-binary %)] (= digits (reverse digits))))
+     (apply +')
+     (println))
