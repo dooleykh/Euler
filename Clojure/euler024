@@ -1,0 +1,7 @@
+#!/usr/bin/env lein-exec
+
+(load-file "combinatorics.clj")
+
+(->> (comb/nth-permutation (range 10) (dec 1000000)) ;;0 indexed
+     (clojure.string/join "")
+     (println))

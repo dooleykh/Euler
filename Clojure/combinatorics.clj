@@ -9,7 +9,8 @@
      :doc "Efficient, functional algorithms for generating lazy
 sequences for common combinatorial functions. (See the source code
 for a longer description.)"}
-  clojure.math.combinatorics
+  ;;clojure.math.combinatorics
+  comb
   (:refer-clojure :exclude [update]))
 
 (comment
